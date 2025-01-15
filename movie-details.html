@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Details</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Include FontAwesome for social media icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .movie-details {
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+    }
+    .movie-details img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      border-radius: 10px;
+    }
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      padding: 20px;
+      color: #fff;
+      font-size: 48px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .play-button:hover {
+      background-color: rgba(255, 0, 0, 0.7);
+    }
+    .image-container {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    .icon-buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .icon-button, .download-button {
+      display: inline-flex;
+      align-items: center;
+      margin: 10px;
+      font-size: 24px;
+      cursor: pointer;
+      transition: color 0.3s;
+      color: #fff;
+      padding: 10px 20px;
+      border: 1px solid #fff;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .icon-button i {
+      margin-right: 8px;
+    }
+    .icon-button:hover, .download-button:hover {
+      color: #555;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      background-color: #1f1f1f;
+      padding: 10px 0;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      cursor: pointer;
+    }
+    .nav-item.active {
+      color: #ff0000;
+    }
+    @media (max-width: 768px) {
+      .play-button {
+        font-size: 36px;
+        padding: 15px;
+      }
+      .icon-button {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="movie-details">
+    <h1 id="movie-title"></h1>
+    <div class="image-container">
+      <img id="movie-image" alt="Movie Image">
+      <span class="material-icons play-button" id="play-button">play_circle_filled</span>
+    </div>
+    <div class="icon-buttons">
+      <div class="icon-button" id="whatsapp-icon">
+        <i class="fab fa-whatsapp"></i> Share
+      </div>
+      <div class="icon-button" id="facebook-icon">
+        <i class="fab fa-facebook-f"></i> Share
+      </div>
+      <div class="icon-button" id="more-icon">
+        <span class="material-icons">more_vert</span> More
+      </div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="navigateTo('index.html')">
+      <span class="material-icons">home</span>
+      <span>Home</span>
+    </div>
+    <div class="nav-item" onclick="navigateTo('category.html')">
+      <span class="material-icons">category</span>
+      <span>Category</span>
+    </div>
+    <div class="nav-item" onclick="navigateTo('favorites.html')">
+      <span class="material-icons">favorite</span>
+      <span>Favorites</span>
+    </div>
+  </div>
+
+  <script>
+    function navigateTo(page) {
+      window.location.href = page;
+    }
+
+    // Get query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const title = urlParams.get('title');
+    const image = urlParams.get('image');
+    const video = urlParams.get('video');
+    const movieId = urlParams.get('id');
+
+    // Display movie details
+    document.getElementById('movie-title').innerText = decodeURIComponent(title);
+    document.getElementById('movie-image').src = decodeURIComponent(image);
+
+    // Play video when play button is clicked
+    document.getElementById('play-button').addEventListener('click', () => {
+      window.open(decodeURIComponent(video), '_blank');
+    });
+
+    // Add event listener to WhatsApp icon
+    document.getElementById('whatsapp-icon').addEventListener('click', () => {
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out this movie: ${title} - ${video}`)}`;
+      window.open(whatsappUrl, '_blank');
+    });
+
+    // Add event listener to Facebook icon
+    document.getElementById('facebook-icon').addEventListener('click', () => {
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(video)}`;
+      window.open(facebookUrl, '_blank');
+    });
+
+    // Fetch movie details from the JSON file
+    fetch("https://multicinema.in/movielist.json")
+      .then(response => response.json())
+      .then(data => {
+        const movie = data.find(movie => movie.id == movieId);
+        if (movie) {
+          const downUlr1 = movie.downUlr1;
+
+          // Add event listener to more icon
+          document.getElementById('more-icon').addEventListener('click', () => {
+            const newPageUrl = `movie_page.html?title=${encodeURIComponent(title)}&image=${encodeURIComponent(image)}&video=${encodeURIComponent(video)}&download=${encodeURIComponent(downUlr1)}&target=external`;
+            window.open(newPageUrl, '_blank');
+          });
+        } else {
+          console.error('Movie not found');
+        }
+      })
+      .catch(error => console.error('Error fetching JSON:', error));
+  </script>
+</body>
+</html>

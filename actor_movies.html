@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multicinema Replica - Actor Movies</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body {
+      background-color: #181818; /* Dark background similar to YouTube's dark theme */
+      color: #ffffff; /* White text color */
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .movie-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .movie-item {
+      background-color: #202020; /* Darker background for movie items */
+      border: 1px solid #333; /* Darker border */
+      border-radius: 5px;
+      overflow: hidden;
+      transition: transform 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .movie-item:hover {
+      transform: scale(1.05);
+    }
+    .movie-item img {
+      width: 100%;
+      border-bottom: 1px solid #333; /* Darker border */
+      position: relative;
+    }
+    .movie-item .year {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+    .movie-item .title-container {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .movie-item .actor-image {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .movie-item h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff; /* White color for titles */
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: left;
+    }
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+      background-color: #202020; /* Darker background for bottom navigation */
+      border-top: 1px solid #333; /* Darker border */
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    .nav-item {
+      text-align: center;
+      color: #ffffff; /* White text color */
+      cursor: pointer;
+    }
+    .nav-item.active {
+      color: #ff0000; /* Red color for active item */
+    }
+    .nav-item span {
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .movie-list {
+        grid-template-columns: 1fr;
+      }
+      .movie-item {
+        width: 100%;
+      }
+    }
+    .actor-name {
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="actorName" class="actor-name"></h1>
+  </header>
+  <main>
+    <div id="movieList" class="movie-list"></div>
+  </main>
+
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="navigateTo('index.html')">
+      <span class="material-icons">home</span>
+      <span>Home</span>
+    </div>
+    <div class="nav-item active" onclick="navigateTo('category.html')">
+      <span class="material-icons">category</span>
+      <span>Category</span>
+    </div>
+    <div class="nav-item" onclick="navigateTo('favorites.html')">
+      <span class="material-icons">favorite</span>
+      <span>Favorites</span>
+    </div>
+  </div>
+
+  <script>
+    // URL of the JSON file stored on GitHub Gist
+    const jsonUrl = 'https://gist.githubusercontent.com/santhoshriha/026184a22b4f688ac354f196b397aa29/raw/d7f2b160d9f1e254226bd8c7920c4600bb7c5f9b/actors_data.json';
+
+    // Function to get actor image by name
+    function getActorImage(actorName, actorCategory) {
+      const actor = actorCategory.find(actor => actor.name === actorName);
+      return actor ? actor.image : '';
+    }
+
+    // Function to display movies
+    function displayMovies(actor, movies, actorCategory) {
+      const movieList = document.getElementById('movieList');
+      movieList.innerHTML = ''; // Clear existing content
+
+      // Filter movies based on actor
+      const filteredMovies = movies.filter(movie => movie.actor === actor);
+
+      filteredMovies.forEach(movie => {
+        const movieItem = document.createElement('div');
+        movieItem.className = 'movie-item';
+        movieItem.innerHTML = `
+          <a href="${movie.url}" target="_blank">
+            <img src="${movie.thumb}" alt="${movie.title}">
+            <span class="year">${movie.year}</span>
+          </a>
+          <div class="title-container">
+            <img src="${getActorImage(movie.actor, actorCategory)}" alt="${movie.actor}" class="actor-image">
+            <h3>${movie.title}</h3>
+          </div>
+        `;
+        movieList.appendChild(movieItem);
+      });
+    }
+
+    // Get the actor parameter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const actor = urlParams.get('actor');
+
+    // Display actor name
+    document.getElementById('actorName').textContent = `${actor} Movies`;
+
+    // Fetch movie data from the JSON file
+    fetch(jsonUrl)
+      .then(response => response.json())
+      .then(data => {
+        const actorCategory = data.actorCategory;
+        const movies = data.movies;
+        
+        // Display movies for the selected actor
+        displayMovies(actor, movies, actorCategory);
+      })
+      .catch(error => console.error('Error fetching JSON:', error));
+
+    function navigateTo(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>
