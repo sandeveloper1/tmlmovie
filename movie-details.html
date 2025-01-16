@@ -27,7 +27,7 @@
     }
     .movie-details img {
       width: 100%;
-      height: auto;
+      height: 200px;
       display: block;
       margin: 0 auto;
       max-width: 100%;
@@ -113,11 +113,9 @@
 <body>
   <div class="movie-details">
     <h1 id="movie-title"></h1>
-    <div class="image-container">
-      <img id="movie-image" alt="Movie Image">
-      <span class="material-icons play-button" id="play-button">play_circle_filled</span>
-    </div>
-    <div class="icon-buttons">
+    
+    <!-- Social Share Buttons placed under the title -->
+    <div class="icon-buttons" style="margin-bottom: 20px;">
       <div class="icon-button" id="whatsapp-icon">
         <i class="fab fa-whatsapp"></i> Share
       </div>
@@ -128,7 +126,13 @@
         <span class="material-icons">more_vert</span> More
       </div>
     </div>
+
+    <div class="image-container">
+      <img id="movie-image" alt="Movie Image">
+      <span class="material-icons play-button" id="play-button">play_circle_filled</span>
+    </div>
   </div>
+
   <div class="bottom-nav">
     <div class="nav-item" onclick="navigateTo('index.html')">
       <span class="material-icons">home</span>
