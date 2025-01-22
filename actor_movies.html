@@ -133,8 +133,8 @@
   </div>
 
   <script>
-    // URL of the JSON file stored on GitHub Gist
-    const jsonUrl = 'https://raw.githubusercontent.com/sandeveloper1/tmlmovie/refs/heads/main/actorsdata.json';
+    // Base URL for the JSON files stored on the local server
+    const baseUrl = 'https://raw.githubusercontent.com/sandeveloper1/tamilmovies/refs/heads/main/actor/';
 
     // Function to get actor image by name
     function getActorImage(actorName, actorCategory) {
@@ -167,6 +167,11 @@
       });
     }
 
+    // Function to navigate to a different page
+    function navigateTo(page) {
+      window.location.href = page;
+    }
+
     // Get the actor parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const actor = urlParams.get('actor');
@@ -174,21 +179,30 @@
     // Display actor name
     document.getElementById('actorName').textContent = `${actor} Movies`;
 
-    // Fetch movie data from the JSON file
-    fetch(jsonUrl)
-      .then(response => response.json())
+    // Construct the URL for the actor-specific JSON file
+    const actorJsonUrl = `${baseUrl}${actor}.json`;
+
+    // Fetch movie data from the actor-specific JSON file
+    fetch(actorJsonUrl)
+      .then(response => {
+        if (!response.ok) {
+          // If the response is not OK, throw an error
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(data => {
-        const actorCategory = data.actorCategory;
-        const movies = data.movies;
+        const actorCategory = data.actorCategory || []; // Ensure actorCategory is an array
+        const movies = data.movies || []; // Ensure movies is an array
         
         // Display movies for the selected actor
         displayMovies(actor, movies, actorCategory);
       })
-      .catch(error => console.error('Error fetching JSON:', error));
-
-    function navigateTo(page) {
-      window.location.href = page;
-    }
+      .catch(error => {
+        console.error('Error fetching JSON:', error);
+        // Display an error message to the user
+        document.getElementById('movieList').innerHTML = '<p>Error loading movies. Please try again later.</p>';
+      });
   </script>
 </body>
 </html>
