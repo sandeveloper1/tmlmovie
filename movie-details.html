@@ -166,7 +166,8 @@
 
     // Play video when play button is clicked
     document.getElementById('play-button').addEventListener('click', () => {
-      window.open(decodeURIComponent(video), '_blank');
+      const movieDetailsUrl = `https://multicinema.in/details.html?id=${movieId}`;
+      window.open(movieDetailsUrl, '_blank');
     });
 
     // Add event listener to WhatsApp icon
