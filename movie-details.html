@@ -166,13 +166,25 @@
 
     // Play video when play button is clicked
     document.getElementById('play-button').addEventListener('click', () => {
-      // Open YouTube channel in a new tab
-      const youtubeChannelUrl = `https://www.youtube.com/@datafactory1?sub_confirmation=1`;
-      window.open(youtubeChannelUrl, '_blank');
+      // Popup to encourage YouTube subscription
+      const subscribePopup = `
+🎬 Hey Movie Lover! 🍿
 
-      // Open movie_page.html in the same tab
-      const moviePageUrl = `movie_page.html?title=${encodeURIComponent(title)}&image=${encodeURIComponent(image)}&video=${encodeURIComponent(video)}&id=${movieId}`;
-      window.location.href = moviePageUrl;
+Before watching the movie, please subscribe to our YouTube channel:
+👉 DataFactory1 YouTube Channel
+
+Subscribing helps us create more awesome content!
+Click OK to be redirected to our channel.`;
+
+      // Show popup and then open YouTube channel
+      if (confirm(subscribePopup)) {
+        const youtubeChannelUrl = `https://www.youtube.com/@datafactory1?sub_confirmation=1`;
+        window.open(youtubeChannelUrl, '_blank');
+
+        // Open movie_page.html in the same tab
+        const moviePageUrl = `movie_page.html?title=${encodeURIComponent(title)}&image=${encodeURIComponent(image)}&video=${encodeURIComponent(video)}&id=${movieId}`;
+        window.location.href = moviePageUrl;
+      }
     });
 
     // Add event listener to WhatsApp icon
