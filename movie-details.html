@@ -197,8 +197,8 @@
 
           // Add event listener to more icon
           document.getElementById('more-icon').addEventListener('click', () => {
-            const newPageUrl = `movie_page.html?title=${encodeURIComponent(title)}&image=${encodeURIComponent(image)}&video=${encodeURIComponent(video)}&download=${encodeURIComponent(downUlr1)}&target=external`;
-            window.open(newPageUrl, '_blank');
+            const newPageUrl = `movie_page.html?title=${encodeURIComponent(title)}&image=${encodeURIComponent(image)}&video=${encodeURIComponent(video)}&id=${movieId}&download=${encodeURIComponent(downUlr1)}`;
+            window.location.href = newPageUrl;
           });
         } else {
           console.error('Movie not found');
