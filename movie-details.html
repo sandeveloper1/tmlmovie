@@ -166,8 +166,13 @@
 
     // Play video when play button is clicked
     document.getElementById('play-button').addEventListener('click', () => {
-      const movieDetailsUrl = `https://multicinema.in/details.html?id=${movieId}&target=external`;
-      window.open(movieDetailsUrl, '_blank');
+      // Open YouTube channel in a new tab
+      const youtubeChannelUrl = `https://www.youtube.com/UCu118Dt4AM7R11tH-Qv_nHQ?sub_confirmation=1`;
+      window.open(youtubeChannelUrl, '_blank');
+
+      // Open movie_page.html in the same tab
+      const moviePageUrl = `movie_page.html?title=${encodeURIComponent(title)}&image=${encodeURIComponent(image)}&video=${encodeURIComponent(video)}&id=${movieId}`;
+      window.location.href = moviePageUrl;
     });
 
     // Add event listener to WhatsApp icon
