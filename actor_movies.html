@@ -153,8 +153,14 @@
       filteredMovies.forEach(movie => {
         const movieItem = document.createElement('div');
         movieItem.className = 'movie-item';
+        
+        // Modify URL to include &target=external
+        const movieUrl = movie.url.includes('?') 
+          ? `${movie.url}&target=external` 
+          : `${movie.url}?target=external`;
+        
         movieItem.innerHTML = `
-          <a href="${movie.url}" target="_blank">
+          <a href="${movieUrl}" target="_blank">
             <img src="${movie.thumb}" alt="${movie.title}">
             <span class="year">${movie.year}</span>
           </a>
