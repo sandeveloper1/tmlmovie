@@ -108,6 +108,58 @@
         font-size: 15px;
       }
     }
+    /* YouTube Subscribe Popup Styles */
+    .subscribe-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .subscribe-popup-content {
+      background-color: #1f1f1f;
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+    .subscribe-popup-content h2 {
+      color: #ff0000;
+      margin-bottom: 20px;
+    }
+    .subscribe-popup-content p {
+      color: #fff;
+      margin-bottom: 25px;
+    }
+    .subscribe-button {
+      background-color: #ff0000;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .subscribe-button:hover {
+      background-color: #cc0000;
+    }
+    .close-popup {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -148,6 +200,16 @@
     </div>
   </div>
 
+  <!-- Subscribe Popup -->
+  <div class="subscribe-popup" id="subscribe-popup">
+    <div class="subscribe-popup-content">
+      <h2>Subscribe to our channel!</h2>
+      <p>WATCH FULL MOVE SUBSCRIBE NOW!</p>
+      <button class="subscribe-button" id="subscribe-button">Subscribe</button>
+      <span class="close-popup" id="close-popup">&times;</span>
+    </div>
+  </div>
+
   <script>
     function navigateTo(page) {
       window.location.href = page;
@@ -166,25 +228,7 @@
 
     // Play video when play button is clicked
     document.getElementById('play-button').addEventListener('click', () => {
-      // Popup to encourage YouTube subscription
-      const subscribePopup = `
-🎬 Hey Movie Lover! 🍿
-
-Before watching the movie, please subscribe to our YouTube channel:
-👉 DataFactory1 YouTube Channel
-
-Subscribing helps us create more awesome content!
-Click OK to be redirected to our channel.`;
-
-      // Show popup and then open YouTube channel
-      if (confirm(subscribePopup)) {
-        const youtubeChannelUrl = `https://www.youtube.com/@datafactory1?sub_confirmation=1`;
-        window.open(youtubeChannelUrl, '_blank');
-
-        // Open movie_page.html in the same tab
-        const moviePageUrl = `movie_page.html?title=${encodeURIComponent(title)}&image=${encodeURIComponent(image)}&video=${encodeURIComponent(video)}&id=${movieId}`;
-        window.location.href = moviePageUrl;
-      }
+      subscribePopup.style.display = 'flex';
     });
 
     // Add event listener to WhatsApp icon
@@ -209,14 +253,39 @@ Click OK to be redirected to our channel.`;
 
           // Add event listener to more icon
           document.getElementById('more-icon').addEventListener('click', () => {
-            const newPageUrl = `movie_page.html?title=${encodeURIComponent(title)}&image=${encodeURIComponent(image)}&video=${encodeURIComponent(video)}&id=${movieId}&download=${encodeURIComponent(downUlr1)}`;
-            window.location.href = newPageUrl;
+            const newPageUrl = `movie_page.html?title=${encodeURIComponent(title)}&image=${encodeURIComponent(image)}&video=${encodeURIComponent(video)}&download=${encodeURIComponent(downUlr1)}&target=external`;
+            window.open(newPageUrl, '_blank');
           });
         } else {
           console.error('Movie not found');
         }
       })
       .catch(error => console.error('Error fetching JSON:', error));
+
+    // Subscribe popup functionality
+    const subscribePopup = document.getElementById('subscribe-popup');
+    const subscribeButton = document.getElementById('subscribe-button');
+    const closeButton = document.getElementById('close-popup');
+    const playButton = document.getElementById('play-button');
+
+    // YouTube channel link
+    const youtubeChannelLink = 'https://www.youtube.com/@datafactory1?sub_confirmation=1&target=external';
+
+    // Open YouTube channel when subscribe button is clicked
+    subscribeButton.addEventListener('click', () => {
+      window.open(youtubeChannelLink, '_blank');
+    });
+
+    closeButton.addEventListener('click', () => {
+      subscribePopup.style.display = 'none';
+    });
+
+    // Optional: Close popup if clicked outside the content
+    subscribePopup.addEventListener('click', (event) => {
+      if (event.target === subscribePopup) {
+        subscribePopup.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
