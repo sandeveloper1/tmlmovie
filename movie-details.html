@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Details</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Include FontAwesome for social media icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .movie-details {
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+    }
+    .movie-details img {
+      width: 100%;
+      height: 200px;
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      border-radius: 10px;
+    }
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      padding: 20px;
+      color: #fff;
+      font-size: 48px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .play-button:hover {
+      background-color: rgba(255, 0, 0, 0.7);
+    }
+    .image-container {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    .icon-buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .icon-button, .download-button {
+      display: inline-flex;
+      align-items: center;
+      margin: 10px;
+      font-size: 24px;
+      cursor: pointer;
+      transition: color 0.3s;
+      color: #fff;
+      padding: 10px 20px;
+      border: 1px solid #fff;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .icon-button i {
+      margin-right: 8px;
+    }
+    .icon-button:hover, .download-button:hover {
+      color: #555;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      background-color: #1f1f1f;
+      padding: 10px 0;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      cursor: pointer;
+    }
+    .nav-item.active {
+      color: #ff0000;
+    }
+    @media (max-width: 768px) {
+      .play-button {
+        font-size: 36px;
+        padding: 15px;
+      }
+      .icon-button {
+        font-size: 15px;
+      }
+    }
+    /* YouTube Subscribe Popup Styles */
+    .subscribe-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .subscribe-popup-content {
+      background-color: #1f1f1f;
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+    .subscribe-popup-content h2 {
+      color: #ff0000;
+      margin-bottom: 20px;
+    }
+    .subscribe-popup-content p {
+      color: #fff;
+      margin-bottom: 25px;
+    }
+    .subscribe-button {
+      background-color: #ff0000;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .subscribe-button:hover {
+      background-color: #cc0000;
+    }
+    .close-popup {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="movie-details">
+    <h1 id="movie-title"></h1>
+    
+    <!-- Social Share Buttons placed under the title -->
+    <div class="icon-buttons" style="margin-bottom: 20px;">
+      <div class="icon-button" id="whatsapp-icon">
+        <i class="fab fa-whatsapp"></i> Share
+      </div>
+      <div class="icon-button" id="facebook-icon">
+        <i class="fab fa-facebook-f"></i> Share
+      </div>
+      <div class="icon-button" id="more-icon">
+        <span class="material-icons">more_vert</span> More
+      </div>
+    </div>
+
+    <div class="image-container">
+      <img id="movie-image" alt="Movie Image">
+      <span class="material-icons play-button" id="play-button">play_circle_filled</span>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="navigateTo('index.html')">
+      <span class="material-icons">home</span>
+      <span>Home</span>
+    </div>
+    <div class="nav-item" onclick="navigateTo('category.html')">
+      <span class="material-icons">category</span>
+      <span>Category</span>
+    </div>
+    <div class="nav-item" onclick="navigateTo('favorites.html')">
+      <span class="material-icons">favorite</span>
+      <span>Favorites</span>
+    </div>
+  </div>
+
+  <!-- Subscribe Popup -->
+  <div class="subscribe-popup" id="subscribe-popup">
+    <div class="subscribe-popup-content">
+      <h2>Subscribe to our channel!</h2>
+      <p>WATCH FULL MOVE SUBSCRIBE NOW!</p>
+      <button class="subscribe-button" id="subscribe-button">Subscribe</button>
+      <span class="close-popup" id="close-popup">&times;</span>
+    </div>
+  </div>
+
+  <script>
+    function navigateTo(page) {
+      window.location.href = page;
+    }
+
+    // Get query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const title = urlParams.get('title');
+    const image = urlParams.get('image');
+    const video = urlParams.get('video');
+    const movieId = urlParams.get('id');
+
+    // Display movie details
+    document.getElementById('movie-title').innerText = decodeURIComponent(title);
+    document.getElementById('movie-image').src = decodeURIComponent(image);
+
+    // Play video when play button is clicked
+    document.getElementById('play-button').addEventListener('click', () => {
+      subscribePopup.style.display = 'flex';
+    });
+
+    // Add event listener to WhatsApp icon
+    document.getElementById('whatsapp-icon').addEventListener('click', () => {
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out this movie: ${title} - ${video}`)}`;
+      window.open(whatsappUrl, '_blank');
+    });
+
+    // Add event listener to Facebook icon
+    document.getElementById('facebook-icon').addEventListener('click', () => {
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(video)}`;
+      window.open(facebookUrl, '_blank');
+    });
+
+    // Fetch movie details from the JSON file
+    fetch("https://multicinema.in/movielist.json")
+      .then(response => response.json())
+      .then(data => {
+        const movie = data.find(movie => movie.id == movieId);
+        if (movie) {
+          const downUlr1 = movie.downUlr1;
+
+          // Add event listener to more icon
+          document.getElementById('more-icon').addEventListener('click', () => {
+            const newPageUrl = `movie_page.html?title=${encodeURIComponent(title)}&image=${encodeURIComponent(image)}&video=${encodeURIComponent(video)}&download=${encodeURIComponent(downUlr1)}&target=external`;
+            window.open(newPageUrl, '_blank');
+          });
+        } else {
+          console.error('Movie not found');
+        }
+      })
+      .catch(error => console.error('Error fetching JSON:', error));
+
+    // Subscribe popup functionality
+    const subscribePopup = document.getElementById('subscribe-popup');
+    const subscribeButton = document.getElementById('subscribe-button');
+    const closeButton = document.getElementById('close-popup');
+    const playButton = document.getElementById('play-button');
+
+    // YouTube channel link
+    const youtubeChannelLink = 'https://www.youtube.com/@datafactory1?sub_confirmation=1&target=external';
+
+    // Open YouTube channel when subscribe button is clicked
+    subscribeButton.addEventListener('click', () => {
+      window.open(youtubeChannelLink, '_blank');
+    });
+
+    closeButton.addEventListener('click', () => {
+      subscribePopup.style.display = 'none';
+    });
+
+    // Optional: Close popup if clicked outside the content
+    subscribePopup.addEventListener('click', (event) => {
+      if (event.target === subscribePopup) {
+        subscribePopup.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
