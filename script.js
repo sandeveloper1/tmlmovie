@@ -15,7 +15,7 @@ if (document.getElementById("movies-container")) {
         image: `https://multicinema.in/${movie.pic}`,
         video: `https://pub-c112d6c4191e458db7adfadb97398a27.r2.dev/${movie.src}?target=video`,
         downloadUrl1: movie.downloadUrl1,
-      }));
+      })).filter(movie => movie.title !== "Lucifer");
       displayMovies(searchLimit);
     })
     .catch((error) => console.error("Error fetching JSON:", error));
