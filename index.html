@@ -69,6 +69,13 @@
     let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
     let debounceTimeout;
     let searchLimit = 25; // Limit the number of search results shown
+    let hiddenMovies = [
+      "lucifer",
+      "Dragon",
+      "Bad Boys",
+      "Fallout",
+      "Migration"
+    ]; // Add movie names you want to hide here
 
     // Fetch movie data if on the home page
     if (document.getElementById("movies-container")) {
@@ -81,7 +88,9 @@
             image: `https://multicinema.in/${movie.pic}`,
             video: `https://pub-c112d6c4191e458db7adfadb97398a27.r2.dev/${movie.src}?target=video`,
             downloadUrl1: movie.downloadUrl1,
-          }));
+          })).filter(movie => !hiddenMovies.some(hiddenMovie => 
+            movie.title.toLowerCase().includes(hiddenMovie.toLowerCase())
+          ));
           displayMovies(searchLimit);
         })
         .catch((error) => console.error("Error fetching JSON:", error));
@@ -151,7 +160,15 @@
 
       // Set new debounce timeout
       debounceTimeout = setTimeout(() => {
-        const filteredMovies = allMovies.filter((movie) => movie.title.toLowerCase().includes(searchTerm));
+        const filteredMovies = allMovies
+          .filter((movie) => {
+            const normalizedTitle = movie.title.toLowerCase().trim();
+            return !hiddenMovies.some(hiddenMovie => 
+              normalizedTitle.includes(hiddenMovie.toLowerCase().trim())
+            );
+          })
+          .filter((movie) => movie.title.toLowerCase().includes(searchTerm));
+        
         const moviesToDisplay = filteredMovies.slice(0, searchLimit); // Only show the first 'searchLimit' movies
 
         moviesToDisplay.forEach((movie) => {
