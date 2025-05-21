@@ -129,7 +129,15 @@
     // Button Actions
     document.getElementById('download-icon').addEventListener('click', () => {
       const downloadUrl = decodeURIComponent(download || '');
-      if (downloadUrl) window.open(downloadUrl, '_blank');
+      if (downloadUrl) {
+        const fileNameMatch = downloadUrl.match(/\/([^\/?#]+\.mp4)/i);
+        if (fileNameMatch && fileNameMatch[1]) {
+          const customUrl = `https://movie.blacktvafterott.in/${fileNameMatch[1]}`;
+          window.open(customUrl, '_blank');
+        } else {
+          alert('Invalid download link');
+        }
+      }
     });
 
     document.getElementById('facebook-icon').addEventListener('click', () => {
