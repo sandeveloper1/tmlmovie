@@ -48,6 +48,7 @@
     }
     .icon-buttons {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
       gap: 15px;
       margin: 20px 0;
@@ -102,8 +103,11 @@
       <div class="icon-button" id="whatsapp-icon">
         <i class="fab fa-whatsapp"></i> WhatsApp
       </div>
-      <div class="icon-button" id="download-icon">
-        <i class="material-icons">download</i> Download
+      <div class="icon-button" id="download-custom-icon">
+        <i class="material-icons">download</i> Download (BlackTV)
+      </div>
+      <div class="icon-button" id="download-mediafire-icon">
+        <i class="material-icons">download</i> Download (Mediafire)
       </div>
     </div>
     
@@ -127,7 +131,7 @@
     document.getElementById('movie-video').src = decodeURIComponent(video || '');
 
     // Button Actions
-    document.getElementById('download-icon').addEventListener('click', () => {
+    document.getElementById('download-custom-icon').addEventListener('click', () => {
       const downloadUrl = decodeURIComponent(download || '');
       if (downloadUrl) {
         const fileNameMatch = downloadUrl.match(/\/([^\/?#]+\.mp4)/i);
@@ -137,6 +141,15 @@
         } else {
           alert('Invalid download link');
         }
+      }
+    });
+
+    document.getElementById('download-mediafire-icon').addEventListener('click', () => {
+      const mediafireLink = decodeURIComponent(download || '');
+      if (mediafireLink) {
+        window.open(mediafireLink, '_blank');
+      } else {
+        alert('Mediafire link not provided');
       }
     });
 
