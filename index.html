@@ -79,7 +79,7 @@
 
     // Fetch movie data if on the home page
     if (document.getElementById("movies-container")) {
-      fetch("https://blacktvafterott.in/movielist.json")
+      fetch("https://playstore.newtamilmovies.in/movielist.json")
         .then((response) => response.json())
         .then((data) => {
           allMovies = data.map((movie) => ({
