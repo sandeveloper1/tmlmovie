@@ -79,13 +79,13 @@
 
     // Fetch movie data if on the home page
     if (document.getElementById("movies-container")) {
-      fetch("https://blacktv.multicinema.in/movielist.json")
+      fetch("https://blacktvafterott.in/movielist.json")
         .then((response) => response.json())
         .then((data) => {
           allMovies = data.map((movie) => ({
             id: movie.id,
             title: truncateText(movie.title, 30),
-            image: `https://blacktv.multicinema.in/movielist.json/${movie.pic}`,
+            image: `https://blacktvafterott.in/movielist.json/${movie.pic}`,
             video: `https://pub-c112d6c4191e458db7adfadb97398a27.r2.dev/${movie.src}?target=video`,
             downloadUrl1: movie.downloadUrl1,
           })).filter(movie => !hiddenMovies.some(hiddenMovie => 
